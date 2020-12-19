@@ -74,7 +74,7 @@ func (c *Config) Load() (*SchemaSpec, error) {
 	if err := ioutil.WriteFile(target, buf, 0644); err != nil {
 		return nil, fmt.Errorf("write file %s: %v", target, err)
 	}
-	// defer os.RemoveAll(".entc")
+	defer os.RemoveAll(".entc")
 	out, err := run(target)
 	if err != nil {
 		return nil, err
