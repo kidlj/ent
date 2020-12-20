@@ -113,7 +113,7 @@ func NewGraph(c *Config, schemas ...*load.Schema) (g *Graph, err error) {
 	for _, t := range g.Nodes {
 		for _, e := range t.Edges {
 			if e.Rel.Type == Unk {
-				panic(fmt.Errorf("edge %s.%s is missing missing for inverse edge", e.Type.Name, e.Name))
+				return nil, fmt.Errorf("edge %s.%s is missing missing for inverse edge", e.Type.Name, e.Name)
 			}
 		}
 	}
@@ -373,7 +373,6 @@ func resolve(t *Type) error {
 			}
 		// Assoc with uninitialized relation.
 		case !e.IsInverse() && e.Rel.Type == Unk:
-			fmt.Printf("%s.%s bidi: %v\n", t.Name, e.Name, e.Bidi)
 			switch {
 			case !e.Unique && e.Bidi:
 				if e.Type != t {
