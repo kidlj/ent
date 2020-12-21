@@ -113,7 +113,7 @@ func NewGraph(c *Config, schemas ...*load.Schema) (g *Graph, err error) {
 	for _, t := range g.Nodes {
 		for _, e := range t.Edges {
 			if e.Rel.Type == Unk {
-				return nil, fmt.Errorf("edge %s.%s is missing missing for inverse edge", e.Type.Name, e.Name)
+				return nil, fmt.Errorf("edge %s.%s is missing for inverse edge", e.Owner.Name, e.Name)
 			}
 		}
 	}
