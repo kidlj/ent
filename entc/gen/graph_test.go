@@ -27,7 +27,7 @@ var (
 		},
 		Edges: []*load.Edge{
 			{Name: "t2", Type: "T2", Required: true},
-			{Name: "t1", Type: "T1", Unique: true},
+			{Name: "t1", Type: "T1", Unique: true, Bidi: true},
 			// Bidirectional unique edge (unique/"has-a" in both sides).
 			{Name: "t2_o2o", Type: "T2", Unique: true},
 			// Unidirectional non-unique edge ("has-many"). The reference is on the "many" side.
@@ -43,7 +43,7 @@ var (
 			// Bidirectional non-unique edge ("has-many" in both side).
 			{Name: "t2_m2m", Type: "T2"},
 			// Unidirectional non-unique edge for the same type.
-			{Name: "t1_m2m", Type: "T1"},
+			{Name: "t1_m2m", Type: "T1", Bidi: true},
 		},
 	}
 	T2 = &load.Schema{
@@ -59,6 +59,8 @@ var (
 			{Name: "t1_m2o", Type: "T1", RefName: "t2_o2m", Unique: true, Inverse: true},
 			{Name: "t1_m2m", Type: "T1", RefName: "t2_m2m", Inverse: true},
 			{Name: "t2_m2m_from", Type: "T2", Ref: &load.Edge{Name: "t2_m2m_to", Type: "T2", Annotations: dict("GQL", map[string]string{"Name": "To"})}, Inverse: true, Annotations: dict("GQL", map[string]string{"Name": "From"})},
+			{Name: "m2o", Type: "T1", RefName: "o2m", Unique: true, Inverse: true},
+			{Name: "o2m", Type: "T1", RefName: "m2o", Inverse: true},
 		},
 	}
 )
@@ -296,7 +298,7 @@ func TestGraph_Gen(t *testing.T) {
 			{Name: "name", Info: &field.TypeInfo{Type: field.TypeString}},
 		},
 		Edges: []*load.Edge{
-			{Name: "t1", Type: "T1", Unique: true},
+			{Name: "t1", Type: "T1", Unique: true, Bidi: true},
 		},
 	})
 	require.NoError(err)
@@ -348,7 +350,7 @@ func TestGraph_Hooks(t *testing.T) {
 			{Name: "name", Info: &field.TypeInfo{Type: field.TypeString}},
 		},
 		Edges: []*load.Edge{
-			{Name: "t1", Type: "T1", Unique: true},
+			{Name: "t1", Type: "T1", Unique: true, Bidi: true},
 		},
 	})
 	require.NoError(err)
